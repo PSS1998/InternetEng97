@@ -22,7 +22,7 @@ public class ReflectionServer {
 	public void startServer() throws Exception {
 
 		HttpServer server = HttpServer.create(new InetSocketAddress(8085), 0);
-        server.createContext("/test", new MyHandler());
+        server.createContext("/phase2", new MyHandler());
         server.setExecutor(null);
         server.start();
 
@@ -60,12 +60,27 @@ public class ReflectionServer {
         	StringTokenizer tokenizer = new StringTokenizer(httpExchange.getRequestURI().getPath(), "/");
         	String context = tokenizer.nextToken();
         	String page = tokenizer.nextToken();
+        	String id=null;
+			if(tokenizer.hasMoreElements()){
+				id = tokenizer.nextToken();
+			}
             Class<IPage> pageClass;
 			try {
-				pageClass = (Class<IPage>) Class.forName("server." + page);
-	            IPage newInstance = pageClass.getDeclaredConstructor().newInstance();
-	            newInstance.HandleRequest(httpExchange);
-			} catch (ClassNotFoundException | 
+				if(id == null) {
+					pageClass = (Class <IPage>) Class.forName("server." + page);
+					IPage newInstance = pageClass.getDeclaredConstructor().newInstance();
+					newInstance.HandleRequest(httpExchange);
+				}
+				else if(page.equals("project")){
+					pageClass = (Class <IPage>) Class.forName("server.project");
+					IPage newInstance = pageClass.getDeclaredConstructor().newInstance();
+					newInstance.HandleRequest(httpExchange);
+				}else if(page.equals("user")){
+					pageClass = (Class <IPage>) Class.forName("server.user");
+					IPage newInstance = pageClass.getDeclaredConstructor().newInstance();
+					newInstance.HandleRequest(httpExchange);
+				}
+			} catch (ClassNotFoundException |
 					InstantiationException | 
 					IllegalAccessException | 
 					IllegalArgumentException | 
