@@ -69,7 +69,7 @@ public class project implements IPage {
                 stringBuilder.append("</td><td>");
                 stringBuilder.append(Data.projects.get(id).getDescription());
                 stringBuilder.append("</td><td>");
-                stringBuilder.append(Data.projects.get(id).getImageURL());
+                stringBuilder.append(Data.projects.get(id).getImageUrl());
                 stringBuilder.append(" </td> </tr>");
             }
 
