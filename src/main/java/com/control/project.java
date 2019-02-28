@@ -145,14 +145,16 @@ public class project extends HttpServlet {
                     "        </tr>\n" );
 
             for (int i = 0; i < Data.projects.size(); i++) {
-                stringBuilder.append("        <tr> <td>");
-                stringBuilder.append(Data.projects.get(i).getId());
-                stringBuilder.append("</td><td>");
-                stringBuilder.append(Data.projects.get(i).getTitle());
-                stringBuilder.append("</td><td>");
-                stringBuilder.append(Data.projects.get(i).getBudget());
-                stringBuilder.append(" </td>" + "</tr>");
-
+                Boolean minReq = Data.user.hasMinReq(Data.projects.get(i).getId());
+                if(minReq) {
+                    stringBuilder.append("        <tr> <td>");
+                    stringBuilder.append(Data.projects.get(i).getId());
+                    stringBuilder.append("</td><td>");
+                    stringBuilder.append(Data.projects.get(i).getTitle());
+                    stringBuilder.append("</td><td>");
+                    stringBuilder.append(Data.projects.get(i).getBudget());
+                    stringBuilder.append(" </td>" + "</tr>");
+                }
             }
         }
         stringBuilder.append(
