@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.StringTokenizer;
 
-@WebServlet(urlPatterns = {"/user/*"})
+@WebServlet(urlPatterns = {"/user", "/user/*"})
 public class user extends HttpServlet {
 
     public static String getHTML(String urlToRead) throws Exception {
@@ -45,40 +45,89 @@ public class user extends HttpServlet {
 //        String context = tokenizer.nextToken();
         String page = tokenizer.nextToken();
         String id=null;
-        if(tokenizer.hasMoreElements()){
+        if(tokenizer.hasMoreElements()) {
             id = tokenizer.nextToken();
-        }
-        stringBuilder.append("<!DOCTYPE html>\n" +
-                "<html lang=\"en\">\n" +
-                "<head>\n" +
-                "    <meta charset=\"UTF-8\">\n" +
-                "    <title>User</title>\n" +
-                "</head>");
-        if(id .equals(Data.user.getId())) {
-            stringBuilder.append("<li>id:" );
-            stringBuilder.append(Data.user.getId()+"</li>"+
-                    "                       <li>first name:");
-            stringBuilder.append(Data.user.getFirstName()+"</li>" +
-                    "                        <li>last name:");
-            stringBuilder.append(Data.user.getLastName()+"</li>" +
-                    "                       <li>jobTitle:");
-            stringBuilder.append(Data.user.getJobTitle()+"<" +
-                    "/li>" +
-                    "                       <li>bio:");
-            stringBuilder.append(Data.user.getBio()+"</li>");
+            stringBuilder.append("<!DOCTYPE html>\n" +
+                    "<html lang=\"en\">\n" +
+                    "<head>\n" +
+                    "    <meta charset=\"UTF-8\">\n" +
+                    "    <title>User</title>\n" +
+                    "</head>");
+            if (id.equals(Data.user.getId())) {
+                stringBuilder.append("<li>id:");
+                stringBuilder.append(Data.user.getId() + "</li>" +
+                        "                       <li>first name:");
+                stringBuilder.append(Data.user.getFirstName() + "</li>" +
+                        "                        <li>last name:");
+                stringBuilder.append(Data.user.getLastName() + "</li>" +
+                        "                       <li>jobTitle:");
+                stringBuilder.append(Data.user.getJobTitle() + "<" +
+                        "/li>" +
+                        "                       <li>bio:");
+                stringBuilder.append(Data.user.getBio() + "</li>");
+            } else {
+                stringBuilder.append("<li>id:...</li>" +
+                        "                        <li>first name: ...</li>" +
+                        "                        <li>last name: ...</li>" +
+                        "                        <li>jobTitle: ...</li>" +
+                        "                        <li>bio: ...</li>");
+            }
+
+            response.setContentType("text/html; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println(stringBuilder.toString());
         }
         else{
-            stringBuilder.append("<li>id:...</li>\\n\" +\n" +
-                    "                \"        <li>first name: ...</li>\\n\" +\n" +
-                    "                \"        <li>last name: ...</li>\\n\" +\n" +
-                    "                \"        <li>jobTitle: ...</li>\\n\" +\n" +
-                    "                \"        <li>bio: ...</li>\\n\" +");
-        }
 
-        response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.println(stringBuilder.toString());
+            stringBuilder.append("<!DOCTYPE html>" +
+                    "<html lang=\"en\">" +
+                    "<head>" +
+                    "    <meta charset=\"UTF-8\">\n" +
+                    "    <title>Users</title>\n" +
+                    "    <style>\n" +
+                    "        table {\n" +
+                    "            text-align: center;\n" +
+                    "            margin: 0 auto;\n" +
+                    "        }\n" +
+                    "        td {\n" +
+                    "            min-width: 300px;\n" +
+                    "            margin: 5px 5px 5px 5px;\n" +
+                    "            text-align: center;\n" +
+                    "        }" +
+                    "    </style>" +
+                    "</head>" +
+                    "<body>\n" +
+                    "    <table>\n" +
+                    "        <tr>\n" +
+                    "            <th>id</th>\n" +
+                    "            <th>title</th>\n" +
+                    "            <th>budget</th>\n" +
+                    "        </tr>\n" );
+
+            for (int i = 0; i < Data.users.size(); i++) {
+                if(!Data.users.get(i).getId().equals(Data.user.getId())) {
+                    stringBuilder.append("        <tr> <td>");
+                    stringBuilder.append(Data.users.get(i).getId());
+                    stringBuilder.append("</td><td>");
+                    stringBuilder.append(Data.users.get(i).getJobTitle());
+                    stringBuilder.append("</td><td>");
+                    stringBuilder.append(Data.users.get(i).printSkills());
+                    stringBuilder.append(" </td>" + "</tr>");
+                }
+            }
+
+            stringBuilder.append(
+
+                    "    </table>\n" +
+                            "</body>\n" +
+                            "</html>");
+
+            response.setContentType("text/html; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println(stringBuilder.toString());
+        }
 
 //        httpExchange.sendResponseHeaders(200, stringBuilder.toString().getBytes(StandardCharsets.UTF_8).length);
 //        OutputStream os = httpExchange.getResponseBody();

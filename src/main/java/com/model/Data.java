@@ -7,24 +7,37 @@ public class Data {
     public static List<Project> projects;
     public static List<Skill>skills;
 
-    public static List<Skill> userSkills = new ArrayList <Skill>(){{
-        add(new Skill("HTML",5));
-        add(new Skill("Javascript",4));
-        add(new Skill("C++",2));
-        add(new Skill("Java",3));
-    }};
     public static User user = new User(
             "1",
           "علی",
             "شریف زاده",
             "برنامه نویس وب",
             "",
-            userSkills,
+            new ArrayList <Skill>(){{
+                add(new Skill("HTML",5));
+                add(new Skill("Javascript",4));
+                add(new Skill("C++",2));
+                add(new Skill("Java",3));
+            }},
             "روی سنگ قبرم بنویسید: خدا بیامورز می خواست خیلی کارا بکنه ولی پول نداشت."
     );
 
     public static List<User> users = new ArrayList<User>() {{
-       add(new User(
+        add(new User(
+                "1",
+                "علی",
+                "شریف زاده",
+                "برنامه نویس وب",
+                "",
+                new ArrayList <Skill>(){{
+                    add(new Skill("HTML",5));
+                    add(new Skill("Javascript",4));
+                    add(new Skill("C++",2));
+                    add(new Skill("Java",3));
+                }},
+                "روی سنگ قبرم بنویسید: خدا بیامورز می خواست خیلی کارا بکنه ولی پول نداشت."
+        ));
+        add(new User(
                "2",
                "محمد",
                "علی زاده",
