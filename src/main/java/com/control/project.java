@@ -1,5 +1,6 @@
 package com.control;
 
+import com.google.gson.Gson;
 import com.model.Data;
 import com.model.Project;
 import com.model.Skill;
@@ -117,6 +118,34 @@ public class project extends HttpServlet {
                     stringBuilder.append("</td><td>");
                     stringBuilder.append(Data.projects.get(id).getImageUrl());
                     stringBuilder.append(" </td> </tr>");
+
+                    stringBuilder.append(
+
+                            "    </table>\n");
+
+                    Boolean hasBidBefore = false;
+                    if(!Data.bids.isEmpty()) {
+                        for (int i = 0; i < Data.bids.size(); i++) {
+                            if (Data.projects.get(id).getId().equals(Data.bids.get(i).getProject().getId())) {
+                                if (Data.bids.get(i).getBiddingUser().getId().equals(Data.user.getId())) {
+                                    hasBidBefore = true;
+                                }
+                            }
+                        }
+                    }
+                    if(!hasBidBefore) {
+                        request.setAttribute("origin", request.getRequestURL());
+                        stringBuilder.append("<form action=\"/bid.jsp\" method=\"GET\">\n" +
+                                "    \t<label for=\"bidAmount\">Bid Amount:</label>\n" +
+                                "    \t<input type=\"number\" name=\"bidAmount\">\n" +
+                                "    \t<input type=\"hidden\" name=\"hid\" value=\"" + Integer.toString(id) + "\">" +
+                                "    \t<button>Submit</button>\n" +
+                                "    </form>");
+                    }
+
+                    stringBuilder.append(
+                                    "</body>\n" +
+                                    "</html>");
                 }
             }
 
@@ -159,12 +188,13 @@ public class project extends HttpServlet {
                     stringBuilder.append(" </td>" + "</tr>");
                 }
             }
-        }
-        stringBuilder.append(
+            stringBuilder.append(
 
-                "    </table>\n" +
-                        "</body>\n" +
-                        "</html>");
+                    "    </table>\n" +
+                            "</body>\n" +
+                            "</html>");
+        }
+
 
 
         if(status == 403){

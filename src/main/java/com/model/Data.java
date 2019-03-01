@@ -7,6 +7,8 @@ public class Data {
     public static List<Project> projects;
     public static List<Skill>skills;
 
+    public static List<Bid>bids = new ArrayList<Bid>();
+
     public static User user = new User(
             "1",
           "علی",

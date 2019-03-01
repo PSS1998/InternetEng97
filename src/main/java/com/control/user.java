@@ -53,25 +53,31 @@ public class user extends HttpServlet {
                     "    <meta charset=\"UTF-8\">\n" +
                     "    <title>User</title>\n" +
                     "</head>");
-            if (id.equals(Data.user.getId())) {
-                stringBuilder.append("<li>id:");
-                stringBuilder.append(Data.user.getId() + "</li>" +
-                        "                       <li>first name:");
-                stringBuilder.append(Data.user.getFirstName() + "</li>" +
-                        "                        <li>last name:");
-                stringBuilder.append(Data.user.getLastName() + "</li>" +
-                        "                       <li>jobTitle:");
-                stringBuilder.append(Data.user.getJobTitle() + "<" +
-                        "/li>" +
-                        "                       <li>bio:");
-                stringBuilder.append(Data.user.getBio() + "</li>");
-            } else {
+            Boolean userFound = false;
+            for (int i=0; i<Data.users.size(); i++) {
+                if (id.equals(Data.users.get(i).getId())) {
+                    userFound = true;
+                    stringBuilder.append("<li>id:");
+                    stringBuilder.append(Data.users.get(i).getId() + "</li>" +
+                            "                       <li>first name:");
+                    stringBuilder.append(Data.users.get(i).getFirstName() + "</li>" +
+                            "                        <li>last name:");
+                    stringBuilder.append(Data.users.get(i).getLastName() + "</li>" +
+                            "                       <li>jobTitle:");
+                    stringBuilder.append(Data.users.get(i).getJobTitle() + "<" +
+                            "/li>" +
+                            "                       <li>bio:");
+                    stringBuilder.append(Data.users.get(i).getBio() + "</li>");
+                }
+            }
+            if(!userFound) {
                 stringBuilder.append("<li>id:...</li>" +
                         "                        <li>first name: ...</li>" +
                         "                        <li>last name: ...</li>" +
                         "                        <li>jobTitle: ...</li>" +
                         "                        <li>bio: ...</li>");
             }
+
 
             response.setContentType("text/html; charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
