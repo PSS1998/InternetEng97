@@ -104,17 +104,20 @@ public class project extends HttpServlet {
             if(id == -1){
                 status =403;
             }else{
-                stringBuilder.append("        <tr> <td>");
-                stringBuilder.append(Data.projects.get(id).getId());
-                stringBuilder.append("</td><td>");
-                stringBuilder.append(Data.projects.get(id).getTitle());
-                stringBuilder.append("</td><td>");
-                stringBuilder.append(Data.projects.get(id).getBudget());
-                stringBuilder.append("</td><td>");
-                stringBuilder.append(Data.projects.get(id).getDescription());
-                stringBuilder.append("</td><td>");
-                stringBuilder.append(Data.projects.get(id).getImageUrl());
-                stringBuilder.append(" </td> </tr>");
+                Boolean minReq = Data.user.hasMinReq(Data.projects.get(id).getId());
+                if(minReq) {
+                    stringBuilder.append("        <tr> <td>");
+                    stringBuilder.append(Data.projects.get(id).getId());
+                    stringBuilder.append("</td><td>");
+                    stringBuilder.append(Data.projects.get(id).getTitle());
+                    stringBuilder.append("</td><td>");
+                    stringBuilder.append(Data.projects.get(id).getBudget());
+                    stringBuilder.append("</td><td>");
+                    stringBuilder.append(Data.projects.get(id).getDescription());
+                    stringBuilder.append("</td><td>");
+                    stringBuilder.append(Data.projects.get(id).getImageUrl());
+                    stringBuilder.append(" </td> </tr>");
+                }
             }
 
         }
