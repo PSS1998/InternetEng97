@@ -114,15 +114,6 @@ public class User {
         return true;
     }
 
-    public String printSkills() {
-        StringBuilder result = new StringBuilder();
-        for (int i=0; i<this.skills.size(); i++){
-            result.append(this.skills.get(i).getName() + ":" + this.skills.get(i).getPoint() + " ");
-        }
-
-        return result.toString();
-    }
-
     public void deleteSkill(String S){
         int id = -1;
         for (int i=0; i<Data.user.getSkills().size(); i++){
