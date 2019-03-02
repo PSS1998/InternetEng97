@@ -9,6 +9,8 @@ public class Data {
 
     public static List<Bid>bids = new ArrayList<Bid>();
 
+    public static List<Endorse>endorses = new ArrayList<Endorse>();
+
     public static User user = new User(
             "1",
           "علی",

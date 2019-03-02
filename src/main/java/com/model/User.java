@@ -122,4 +122,41 @@ public class User {
 
         return result.toString();
     }
+
+    public void deleteSkill(String S){
+        int id = -1;
+        for (int i=0; i<Data.user.getSkills().size(); i++){
+            if(Data.user.getSkills().get(i).getName().equals(S)){
+                id = i;
+                break;
+            }
+        }
+        if(id != -1)
+            this.skills.remove(id);
+    }
+
+    public void addSkill(String S){
+        int id = -1;
+        for (int i=0; i<Data.user.getSkills().size(); i++){
+            if(Data.user.getSkills().get(i).getName().equals(S)){
+                id = i;
+                break;
+            }
+        }
+        if(id == -1) {
+            this.skills.add(new Skill(S, 0));
+        }
+    }
+
+    public void endorseSkill(String S){
+        int id = -1;
+        for (int i=0; i<Data.user.getSkills().size(); i++){
+            if(Data.user.getSkills().get(i).getName().equals(S)){
+                id = i;
+                break;
+            }
+        }
+        if(id != -1)
+            this.skills.get(id).endorse();
+    }
 }

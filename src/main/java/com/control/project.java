@@ -7,6 +7,7 @@ import com.model.Skill;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -67,146 +68,30 @@ public class project extends HttpServlet {
         String page = tokenizer.nextToken();
         String idd=null;
         if(tokenizer.hasMoreElements()){
-            stringBuilder.append("<!DOCTYPE html>" +
-                    "<html lang=\"en\">" +
-                    "<head>" +
-                    "    <meta charset=\"UTF-8\">\n" +
-                    "    <title>Projects</title>\n" +
-                    "    <style>\n" +
-                    "        table {\n" +
-                    "            text-align: center;\n" +
-                    "            margin: 0 auto;\n" +
-                    "        }\n" +
-                    "        td {\n" +
-                    "            min-width: 300px;\n" +
-                    "            margin: 5px 5px 5px 5px;\n" +
-                    "            text-align: center;\n" +
-                    "        }" +
-                    "    </style>" +
-                    "</head>" +
-                    "<body>\n" +
-                    "    <table>\n" +
-                    "        <tr>\n" +
-                    "            <th>id</th>\n" +
-                    "            <th>title</th>\n" +
-                    "            <th>budget</th>\n" +
-                    "            <th>description</th>\n" +
-                    "            <th>imageURL</th>\n" +
-                    "        </tr>\n" );
-            idd = tokenizer.nextToken();
-            int id = -1;
-            for (int i = 0; i < Data.projects.size(); i++) {
-                if(Data.projects.get(i).getId().equals(idd)){
-                    id =i;
-                    break;
-                }
-            }
-
-            if(id == -1){
-                status =403;
-            }else{
-                Boolean minReq = Data.user.hasMinReq(Data.projects.get(id).getId());
-                if(minReq) {
-                    stringBuilder.append("        <tr> <td>");
-                    stringBuilder.append(Data.projects.get(id).getId());
-                    stringBuilder.append("</td><td>");
-                    stringBuilder.append(Data.projects.get(id).getTitle());
-                    stringBuilder.append("</td><td>");
-                    stringBuilder.append(Data.projects.get(id).getBudget());
-                    stringBuilder.append("</td><td>");
-                    stringBuilder.append(Data.projects.get(id).getDescription());
-                    stringBuilder.append("</td><td>");
-                    stringBuilder.append(Data.projects.get(id).getImageUrl());
-                    stringBuilder.append(" </td> </tr>");
-
-                    stringBuilder.append(
-
-                            "    </table>\n");
-
-                    Boolean hasBidBefore = false;
-                    if(!Data.bids.isEmpty()) {
-                        for (int i = 0; i < Data.bids.size(); i++) {
-                            if (Data.projects.get(id).getId().equals(Data.bids.get(i).getProject().getId())) {
-                                if (Data.bids.get(i).getBiddingUser().getId().equals(Data.user.getId())) {
-                                    hasBidBefore = true;
-                                }
-                            }
-                        }
-                    }
-                    if(!hasBidBefore) {
-                        request.setAttribute("origin", request.getRequestURL());
-                        stringBuilder.append("<form action=\"/bid.jsp\" method=\"GET\">\n" +
-                                "    \t<label for=\"bidAmount\">Bid Amount:</label>\n" +
-                                "    \t<input type=\"number\" name=\"bidAmount\">\n" +
-                                "    \t<input type=\"hidden\" name=\"hid\" value=\"" + Integer.toString(id) + "\">" +
-                                "    \t<button>Submit</button>\n" +
-                                "    </form>");
-                    }
-
-                    stringBuilder.append(
-                                    "</body>\n" +
-                                    "</html>");
-                }
-            }
-
-        }
-        else {
-            stringBuilder.append("<!DOCTYPE html>" +
-                    "<html lang=\"en\">" +
-                    "<head>" +
-                    "    <meta charset=\"UTF-8\">\n" +
-                    "    <title>Projects</title>\n" +
-                    "    <style>\n" +
-                    "        table {\n" +
-                    "            text-align: center;\n" +
-                    "            margin: 0 auto;\n" +
-                    "        }\n" +
-                    "        td {\n" +
-                    "            min-width: 300px;\n" +
-                    "            margin: 5px 5px 5px 5px;\n" +
-                    "            text-align: center;\n" +
-                    "        }" +
-                    "    </style>" +
-                    "</head>" +
-                    "<body>\n" +
-                    "    <table>\n" +
-                    "        <tr>\n" +
-                    "            <th>id</th>\n" +
-                    "            <th>title</th>\n" +
-                    "            <th>budget</th>\n" +
-                    "        </tr>\n" );
-
-            for (int i = 0; i < Data.projects.size(); i++) {
-                Boolean minReq = Data.user.hasMinReq(Data.projects.get(i).getId());
-                if(minReq) {
-                    stringBuilder.append("        <tr> <td>");
-                    stringBuilder.append(Data.projects.get(i).getId());
-                    stringBuilder.append("</td><td>");
-                    stringBuilder.append(Data.projects.get(i).getTitle());
-                    stringBuilder.append("</td><td>");
-                    stringBuilder.append(Data.projects.get(i).getBudget());
-                    stringBuilder.append(" </td>" + "</tr>");
-                }
-            }
-            stringBuilder.append(
-
-                    "    </table>\n" +
-                            "</body>\n" +
-                            "</html>");
+            request.setAttribute("ID", tokenizer.nextToken());
+            RequestDispatcher requestDispatcher;
+            requestDispatcher = request.getRequestDispatcher("/projectDetails.jsp");
+            requestDispatcher.forward(request, response);
         }
 
 
 
-        if(status == 403){
-            stringBuilder = new StringBuffer();
-            stringBuilder.append("PROJECT NOT FOUND");
-        }
-        response.setStatus(status, "PROJECT NOT FOUND!!!" );
-        response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-//        System.out.println(projectsString);
-        out.println(stringBuilder.toString());
+//        if(status == 403){
+//            stringBuilder = new StringBuffer();
+//            stringBuilder.append("PROJECT NOT FOUND");
+//        }
+//        response.setStatus(status, "PROJECT NOT FOUND!!!" );
+//        response.setContentType("text/html; charset=UTF-8");
+//        response.setCharacterEncoding("UTF-8");
+//        PrintWriter out = response.getWriter();
+//        out.println(stringBuilder.toString());
+
+
+        RequestDispatcher requestDispatcher;
+        requestDispatcher = request.getRequestDispatcher("/project.jsp");
+        requestDispatcher.forward(request, response);
+
+
 //        httpExchange.sendResponseHeaders(status, stringBuilder.toString().getBytes(StandardCharsets.UTF_8).length);
 //        OutputStream os = httpExchange.getResponseBody();
 //        os.write(stringBuilder.toString().getBytes(StandardCharsets.UTF_8));
