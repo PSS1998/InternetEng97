@@ -150,8 +150,8 @@ public class User {
 
     public void endorseSkill(String S){
         int id = -1;
-        for (int i=0; i<Data.user.getSkills().size(); i++){
-            if(Data.user.getSkills().get(i).getName().equals(S)){
+        for (int i=0; i<this.getSkills().size(); i++){
+            if(this.getSkills().get(i).getName().equals(S)){
                 id = i;
                 break;
             }
