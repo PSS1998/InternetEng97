@@ -26,4 +26,8 @@ public class Skill {
     public void setPoint(int point) {
         this.point = point;
     }
+
+    public void endorse() {
+        this.point = this.point+1;
+    }
 }

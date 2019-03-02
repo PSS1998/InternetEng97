@@ -84,4 +84,79 @@ public class User {
     public void setBio(String bio) {
         this.bio = bio;
     }
+
+    public Boolean hasMinReq(String projectID) {
+        int index = -1;
+        for (int i = 0; i < Data.projects.size(); i++){
+            if(Data.projects.get(i).getId().equals(projectID)){
+                index = i;
+                break;
+            }
+        }
+        int hasThisSkill = 0;
+        for (int i = 0; i < Data.projects.get(index).getSkills().size(); i++){
+            hasThisSkill = 0;
+            for (int j = 0; j < Data.user.getSkills().size(); j++){
+                if(Data.user.getSkills().get(j).getName().equals(Data.projects.get(index).getSkills().get(i).getName())){
+                    if(Data.user.getSkills().get(j).getPoint() < Data.projects.get(index).getSkills().get(i).getPoint()){
+                        return false;
+                    }
+                    else{
+                        hasThisSkill = 1;
+                        break;
+                    }
+                }
+            }
+            if(hasThisSkill == 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public String printSkills() {
+        StringBuilder result = new StringBuilder();
+        for (int i=0; i<this.skills.size(); i++){
+            result.append(this.skills.get(i).getName() + ":" + this.skills.get(i).getPoint() + " ");
+        }
+
+        return result.toString();
+    }
+
+    public void deleteSkill(String S){
+        int id = -1;
+        for (int i=0; i<Data.user.getSkills().size(); i++){
+            if(Data.user.getSkills().get(i).getName().equals(S)){
+                id = i;
+                break;
+            }
+        }
+        if(id != -1)
+            this.skills.remove(id);
+    }
+
+    public void addSkill(String S){
+        int id = -1;
+        for (int i=0; i<Data.user.getSkills().size(); i++){
+            if(Data.user.getSkills().get(i).getName().equals(S)){
+                id = i;
+                break;
+            }
+        }
+        if(id == -1) {
+            this.skills.add(new Skill(S, 0));
+        }
+    }
+
+    public void endorseSkill(String S){
+        int id = -1;
+        for (int i=0; i<this.getSkills().size(); i++){
+            if(this.getSkills().get(i).getName().equals(S)){
+                id = i;
+                break;
+            }
+        }
+        if(id != -1)
+            this.skills.get(id).endorse();
+    }
 }
