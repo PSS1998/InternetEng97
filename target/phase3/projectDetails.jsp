@@ -24,11 +24,6 @@
         int id = -1;
         try {
             String idd = request.getAttribute("ID").toString();
-//            StringTokenizer tokenizer = new StringTokenizer(request.getRequestURI(), "/");
-//            System.out.println(tokenizer.nextToken());
-//            String pageAddress = tokenizer.nextToken();
-//            String idd=null;
-//            idd = tokenizer.nextToken();
 
             for (int i = 0; i < Data.projects.size(); i++) {
                 if(Data.projects.get(i).getId().equals(idd)){
@@ -52,8 +47,8 @@
         <li>budget: <%=Data.projects.get(id).getBudget()%></li>
     </ul>
     <%
-            }
-        }
+//            }
+//        }
     %>
 
     <%
@@ -78,6 +73,11 @@
     </form>
 
     <%
+                }
+            }
+            else{
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                }
         }
     %>
 

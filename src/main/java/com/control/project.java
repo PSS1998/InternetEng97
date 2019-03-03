@@ -1,6 +1,5 @@
 package com.control;
 
-import com.google.gson.Gson;
 import com.model.Data;
 import com.model.Project;
 import com.model.Skill;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -64,7 +62,6 @@ public class project extends HttpServlet {
 
 
         StringTokenizer tokenizer = new StringTokenizer(request.getRequestURI(), "/");
-//        String context = tokenizer.nextToken();
         String page = tokenizer.nextToken();
         String idd=null;
         if(tokenizer.hasMoreElements()){
@@ -75,27 +72,10 @@ public class project extends HttpServlet {
         }
 
 
-
-//        if(status == 403){
-//            stringBuilder = new StringBuffer();
-//            stringBuilder.append("PROJECT NOT FOUND");
-//        }
-//        response.setStatus(status, "PROJECT NOT FOUND!!!" );
-//        response.setContentType("text/html; charset=UTF-8");
-//        response.setCharacterEncoding("UTF-8");
-//        PrintWriter out = response.getWriter();
-//        out.println(stringBuilder.toString());
-
-
         RequestDispatcher requestDispatcher;
         requestDispatcher = request.getRequestDispatcher("/project.jsp");
         requestDispatcher.forward(request, response);
 
-
-//        httpExchange.sendResponseHeaders(status, stringBuilder.toString().getBytes(StandardCharsets.UTF_8).length);
-//        OutputStream os = httpExchange.getResponseBody();
-//        os.write(stringBuilder.toString().getBytes(StandardCharsets.UTF_8));
-//        os.close();
 
     }
 }
