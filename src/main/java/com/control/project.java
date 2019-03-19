@@ -101,11 +101,11 @@ public class project extends HttpServlet {
                             jsonObjectSkills.put(Data.projects.get(id).getSkills().get(i).getName(), Data.projects.get(id).getSkills().get(i).getPoint());
                         }
                         jsonObject.put("Skills", jsonObjectSkills);
-                        JSONObject jsonObjectBids = new JSONObject();
-                        for(int i=0; i<Data.projects.get(id).getBids().size(); i++){
-                            jsonObjectBids.put(Data.projects.get(id).getBids().get(i).getBiddingUser().getId(), Data.projects.get(id).getBids().get(i).getBidAmount());
-                        }
-                        jsonObject.put("Bids", jsonObjectBids);
+//                        JSONObject jsonObjectBids = new JSONObject();
+//                        for(int i=0; i<Data.projects.get(id).getBids().size(); i++){
+//                            jsonObjectBids.put(Data.projects.get(id).getBids().get(i).getBiddingUser().getId(), Data.projects.get(id).getBids().get(i).getBidAmount());
+//                        }
+//                        jsonObject.put("Bids", jsonObjectBids);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
