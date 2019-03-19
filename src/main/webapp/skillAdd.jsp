@@ -7,7 +7,7 @@
 </head>
 <body>
 <%
-    String SkillName = request.getParameter("skillName").toString();
+    String SkillName = request.getParameter("skillName");
     Data.user.addSkill(SkillName);
 %>
 <jsp:forward page="userLoggedin.jsp"/>
