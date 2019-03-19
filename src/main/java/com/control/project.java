@@ -96,16 +96,16 @@ public class project extends HttpServlet {
                         jsonObject.put("ImageURL", Data.projects.get(id).getImageUrl());
                         jsonObject.put("Budget", Data.projects.get(id).getBudget());
                         jsonObject.put("Deadline", Data.projects.get(id).getDeadline());
+                        JSONObject jsonObjectSkills = new JSONObject();
                         for(int i=0; i<Data.projects.get(id).getSkills().size(); i++){
-                            JSONObject jsonObjectSkills = new JSONObject();
                             jsonObjectSkills.put(Data.projects.get(id).getSkills().get(i).getName(), Data.projects.get(id).getSkills().get(i).getPoint());
-                            jsonObject.put("Skills", jsonObjectSkills);
                         }
+                        jsonObject.put("Skills", jsonObjectSkills);
+                        JSONObject jsonObjectBids = new JSONObject();
                         for(int i=0; i<Data.projects.get(id).getBids().size(); i++){
-                            JSONObject jsonObjectBids = new JSONObject();
                             jsonObjectBids.put(Data.projects.get(id).getBids().get(i).getBiddingUser().getId(), Data.projects.get(id).getBids().get(i).getBidAmount());
-                            jsonObject.put("Bids", jsonObjectBids);
                         }
+                        jsonObject.put("Bids", jsonObjectBids);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -131,33 +131,34 @@ public class project extends HttpServlet {
 //            requestDispatcher = request.getRequestDispatcher("/projectDetails.jsp");
 //            requestDispatcher.forward(request, response);
         }
+        else {
 
-        JSONArray jsonArray = new JSONArray();
-        List<JSONObject> list = new ArrayList<>();
-        try {
-            for (Project p : Data.projects) {
-                Boolean minReq = Data.user.hasMinReq(p.getId());
-                if(minReq) {
-                    JSONObject object = new JSONObject();
-                    object.put("ID", p.getId());
-                    object.put("Title", p.getTitle());
-                    object.put("Budget", p.getBudget());
-                    jsonArray.put(object);
+            JSONArray jsonArray = new JSONArray();
+            List<JSONObject> list = new ArrayList<>();
+            try {
+                for (Project p : Data.projects) {
+                    Boolean minReq = Data.user.hasMinReq(p.getId());
+                    if (minReq) {
+                        JSONObject object = new JSONObject();
+                        object.put("ID", p.getId());
+                        object.put("Title", p.getTitle());
+                        object.put("Budget", p.getBudget());
+                        jsonArray.put(object);
+                    }
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        response.setContentType("application/json; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.print(jsonArray);
-        out.flush();
+            response.setContentType("application/json; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print(jsonArray);
+            out.flush();
 //        RequestDispatcher requestDispatcher;
 //        requestDispatcher = request.getRequestDispatcher("/project.jsp");
 //        requestDispatcher.forward(request, response);
-
+        }
 
     }
 }
