@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 @WebServlet(urlPatterns = {"/user", "/user/*"})
 public class user extends HttpServlet {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
     }
 

@@ -1,5 +1,6 @@
 package com.control;
 
+import com.google.gson.Gson;
 import com.model.Data;
 import com.model.Project;
 import com.model.Skill;
@@ -15,8 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import org.json.*;
 
 @WebServlet(urlPatterns = {"/project", "/project/*"})
 public class project extends HttpServlet {
@@ -26,7 +32,7 @@ public class project extends HttpServlet {
         URL url = new URL(urlToRead);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
-        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
         String line;
         while ((line = rd.readLine()) != null) {
             result.append(line);
@@ -35,7 +41,7 @@ public class project extends HttpServlet {
         return result.toString();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
     }
 
@@ -65,16 +71,92 @@ public class project extends HttpServlet {
         String page = tokenizer.nextToken();
         String idd=null;
         if(tokenizer.hasMoreElements()){
-            request.setAttribute("ID", tokenizer.nextToken());
-            RequestDispatcher requestDispatcher;
-            requestDispatcher = request.getRequestDispatcher("/projectDetails.jsp");
-            requestDispatcher.forward(request, response);
+
+            int id = -1;
+            try {
+                String idString = tokenizer.nextToken();
+                for (int i = 0; i < Data.projects.size(); i++) {
+                    if(Data.projects.get(i).getId().equals(idString)){
+                        id = i;
+                        break;
+                    }
+                }
+            }
+            catch (Exception E) {
+                System.out.println(E.toString());
+            }
+            if (id != -1){
+                Boolean minReq = Data.user.hasMinReq(Data.projects.get(id).getId());
+                if(minReq) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("ID", Data.projects.get(id).getId());
+                        jsonObject.put("Title", Data.projects.get(id).getTitle());
+                        jsonObject.put("Description", Data.projects.get(id).getDescription());
+                        jsonObject.put("ImageURL", Data.projects.get(id).getImageUrl());
+                        jsonObject.put("Budget", Data.projects.get(id).getBudget());
+                        jsonObject.put("Deadline", Data.projects.get(id).getDeadline());
+                        for(int i=0; i<Data.projects.get(id).getSkills().size(); i++){
+                            JSONObject jsonObjectSkills = new JSONObject();
+                            jsonObjectSkills.put(Data.projects.get(id).getSkills().get(i).getName(), Data.projects.get(id).getSkills().get(i).getPoint());
+                            jsonObject.put("Skills", jsonObjectSkills);
+                        }
+                        for(int i=0; i<Data.projects.get(id).getBids().size(); i++){
+                            JSONObject jsonObjectBids = new JSONObject();
+                            jsonObjectBids.put(Data.projects.get(id).getBids().get(i).getBiddingUser().getId(), Data.projects.get(id).getBids().get(i).getBidAmount());
+                            jsonObject.put("Bids", jsonObjectBids);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    response.setContentType("application/json; charset=UTF-8");
+                    response.setCharacterEncoding("UTF-8");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonObject);
+                    out.flush();
+                }
+                else{
+                    JSONObject jsonObject = new JSONObject();
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setContentType("application/json; charset=UTF-8");
+                    response.setCharacterEncoding("UTF-8");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonObject);
+                    out.flush();
+                }
+            }
+
+//            request.setAttribute("ID", tokenizer.nextToken());
+//            RequestDispatcher requestDispatcher;
+//            requestDispatcher = request.getRequestDispatcher("/projectDetails.jsp");
+//            requestDispatcher.forward(request, response);
         }
 
+        JSONArray jsonArray = new JSONArray();
+        List<JSONObject> list = new ArrayList<>();
+        try {
+            for (Project p : Data.projects) {
+                Boolean minReq = Data.user.hasMinReq(p.getId());
+                if(minReq) {
+                    JSONObject object = new JSONObject();
+                    object.put("ID", p.getId());
+                    object.put("Title", p.getTitle());
+                    object.put("Budget", p.getBudget());
+                    jsonArray.put(object);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        RequestDispatcher requestDispatcher;
-        requestDispatcher = request.getRequestDispatcher("/project.jsp");
-        requestDispatcher.forward(request, response);
+        response.setContentType("application/json; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(jsonArray);
+        out.flush();
+//        RequestDispatcher requestDispatcher;
+//        requestDispatcher = request.getRequestDispatcher("/project.jsp");
+//        requestDispatcher.forward(request, response);
 
 
     }

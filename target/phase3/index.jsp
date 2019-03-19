@@ -15,6 +15,8 @@
     Data.skills = mapper.readValue(skillsString, new TypeReference<List<Skill>>(){});
 %>
 
+
+
 <h2>Hello World!</h2>
 </body>
 </html>
