@@ -143,6 +143,14 @@ public class project extends HttpServlet {
                         object.put("ID", p.getId());
                         object.put("Title", p.getTitle());
                         object.put("Budget", p.getBudget());
+                        object.put("Description", p.getDescription());
+                        object.put("ImageURL", p.getImageUrl());
+                        object.put("Deadline", p.getDeadline());
+                        JSONObject jsonObjectSkills = new JSONObject();
+                        for(int i=0; i<p.getSkills().size(); i++){
+                            jsonObjectSkills.put(p.getSkills().get(i).getName(), p.getSkills().get(i).getPoint());
+                        }
+                        object.put("Skills", jsonObjectSkills);
                         jsonArray.put(object);
                     }
                 }
